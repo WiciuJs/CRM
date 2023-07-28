@@ -42,7 +42,7 @@ router.put('/:id', getCustomer, async (req, res) => {
 
 router.delete('/:id', getCustomer, async (req, res) => {
   try {
-    await res.customer.remove();
+    await Customer.findOneAndDelete({_id: req.params.id});
     res.json({ message: 'Usunięto klienta' });
   } catch (err) {
     res.status(500).json({ message: err.message });
