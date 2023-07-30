@@ -1,52 +1,72 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 const CustomerForm = () => {
   const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [company, setCompany] = useState('');
+  const [street, setStreet] = useState('');
+  const [zipcode, setZipcode] = useState('');
+  const [city, setCity] = useState('');
   const [nip, setNip] = useState('');
-  const history = useHistory();
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('/api/customers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, address, company, nip }),
-      });
-      const data = await response.json();
-      console.log('Nowy klient dodany:', data);
-      history.push('/');
-    } catch (error) {
-      console.error('Błąd podczas dodawania klienta:', error.message);
-    }
+
+    const customerData =
+     {
+      name,
+      address: {
+        street,
+        zipcode,
+        city,
+      },
+      nip,
+    };
+
+    fetch('/api/customers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(customerData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setSuccessMessage('Klient został dodany pomyślnie.');
+        setName('');
+        setStreet('');
+        setZipcode('');
+        setCity('');
+        setNip('');
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
     <div>
       <h1>Dodaj klienta</h1>
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
+      <div>
           <label>Nazwa:</label>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div>
-          <label>Adres:</label>
-          <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required />
+          <label>Ulica:</label>
+          <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} required />
         </div>
         <div>
-          <label>Firma/Osoba:</label>
-          <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} />
+          <label>Kod pocztowy:</label>
+          <input type="text" value={zipcode} onChange={(e) => setZipcode(e.target.value)} required />
+        </div>
+        <div>
+          <label>Miasto:</label>
+          <input type="text" value={city} onChange={(e) => setCity(e.target.value)} required />
         </div>
         <div>
           <label>NIP:</label>
           <input type="text" value={nip} onChange={(e) => setNip(e.target.value)} />
         </div>
-        <button type="submit">Dodaj klienta</button>
+        <button type="submit">Dodaj</button>
       </form>
     </div>
   );

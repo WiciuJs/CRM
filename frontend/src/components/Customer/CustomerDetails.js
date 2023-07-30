@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ActionForm from '../Action/ActionForm';
 
 const CustomerDetails = () => {
   const { customerId } = useParams();
   const [customer, setCustomer] = useState(null);
+  const [actions, setActions] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`/api/customers/${customerId}`);
-        const data = await response.json();
-        setCustomer(data);
-      } catch (error) {
-        console.error('Błąd podczas pobierania danych:', error.message);
-      }
-    };
+    fetch(`/api/customers/${customerId}`)
+      .then((response) => response.json())
+      .then((data) => setCustomer(data))
+      .catch((error) => console.log(error));
 
-    fetchData();
+    fetch(`/api/actions/${customerId}`)
+      .then((response) => response.json())
+      .then((data) => setActions(data))
+      .catch((error) => console.log(error));
   }, [customerId]);
 
   if (!customer) {
@@ -25,15 +25,23 @@ const CustomerDetails = () => {
 
   return (
     <div>
-      <h1>{customer.name}</h1>
-      <p>Adres: {customer.address}</p>
-      {customer.company && <p>Firma/Osoba: {customer.company}</p>}
-      {customer.nip && <p>NIP: {customer.nip}</p>}
+      <h1>Szczegóły klienta</h1>
+      <p>Nazwa: {customer.name}</p>
+      <p>Adres: {customer.address.street}, {customer.address.zipcode} {customer.address.city}</p>
+      <p>NIP: {customer.nip}</p>
+
       <h2>Akcje</h2>
       <ul>
-        {}
+        {actions.map((action) => (
+          <li key={action._id}>
+            <p>Data kontaktu: {action.date}</p>
+            <p>Rodzaj akcji: {action.type}</p>
+            <p>Opis akcji: {action.description}</p>
+          </li>
+        ))}
       </ul>
-      <a href={`/add-action/${customerId}`}>Dodaj akcję</a>
+
+      <ActionForm customerId={customerId} />
     </div>
   );
 };
