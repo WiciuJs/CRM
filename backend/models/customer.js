@@ -7,7 +7,7 @@ const customerSchema = new mongoose.Schema({
     zipcode: { type: String, required: true },
     city: { type: String, required: true }
   },
-  nip: { type: String }
+  nip: { type: String, required: true}
 });
 
 const Customer = mongoose.model('Customer', customerSchema);
