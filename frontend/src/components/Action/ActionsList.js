@@ -1,20 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ActionForm = ({ customerId }) => {
+const ActionList = ({ customerId }) => {
+  const [actions, setActions] = useState([]);
   const [date, setDate] = useState('');
   const [type, setType] = useState('');
   const [description, setDescription] = useState('');
 
+  useEffect(() => {
+    fetchActions();
+  }, [customerId]);
+
+  const fetchActions = async () => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:5000/api/customers/${customerId}/actions`);
+      setActions(response.data);
+    } catch (error) {
+      console.error('Error fetching actions:', error.message);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/api/actions/${customerId}`, {
+      const response = await axios.post(`http://127.0.0.1:5000/api/customers/${customerId}/actions`, {
         date,
         type,
         description,
       });
       console.log('New action added:', response.data);
+      fetchActions();
     } catch (error) {
       console.error('Error adding new action:', error.message);
     }
@@ -55,8 +70,19 @@ const ActionForm = ({ customerId }) => {
         </div>
         <button type="submit">Dodaj akcję</button>
       </form>
+
+      <h2>Lista akcji dla klienta</h2>
+      <ul>
+        {actions.map((action) => (
+          <li key={action._id}>
+            <p>Data kontaktu: {action.date}</p>
+            <p>Rodzaj akcji: {action.type}</p>
+            <p>Opis akcji: {action.description}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default ActionForm;
+export default ActionList;

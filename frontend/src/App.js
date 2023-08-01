@@ -3,10 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CustomerList from './components/Customer/CustomerList';
 import CustomerForm from './components/Customer/CustomerForm';
 import CustomerDetails from './components/Customer/CustomerDetails';
-import ActionForm from './components/Action/ActionForm';
 import './components/style/styles.css';
-
-
 
 const App = () => {
   return (
@@ -15,7 +12,7 @@ const App = () => {
         <nav>
           <ul>
             <li>
-            <Link to="/">LOGIN</Link>
+              <Link to="/">LOGIN</Link>
             </li>
             <li>
               <Link to="/">STRONA GŁÓWNA</Link>
@@ -27,7 +24,6 @@ const App = () => {
           <Route path="/" element={<CustomerList />} />
           <Route path="/add-customer" element={<CustomerForm />} />
           <Route path="/customer/:customerId" element={<CustomerDetails />} />
-          <Route path="/add-action/:customerId" element={<ActionForm />} />
         </Routes>
       </div>
     </Router>

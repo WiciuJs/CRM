@@ -1,12 +1,29 @@
-const mongoose = require('mongoose');
+const Action = require('../models/action');
 
-const actionSchema = new mongoose.Schema({
-  customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
-  date: { type: Date, required: true },
-  type: { type: String, required: true },
-  description: { type: String, required: true }
-});
+exports.getCustomerActions = async (req, res) => {
+  try {
+    const actions = await Action.find({ customer: req.params.customerId });
+    res.json(actions);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
-const Action = mongoose.model('Action', actionSchema);
+exports.createAction = async (req, res) => {
+  const { date, type, description } = req.body;
+  const { customerId } = req.params;
 
-module.exports = Action;
+  const action = new Action({
+    customer: customerId,
+    date,
+    type,
+    description,
+  });
+
+  try {
+    const newAction = await action.save();
+    res.status(201).json(newAction);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};

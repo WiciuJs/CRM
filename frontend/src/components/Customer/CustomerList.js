@@ -5,7 +5,7 @@ const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
-    fetch('/api/customers')
+    fetch('http://127.0.0.1:5000/api/customers')
       .then((response) => response.json())
       .then((data) => setCustomers(data))
       .catch((error) => console.log(error));
