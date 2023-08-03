@@ -22,7 +22,7 @@ nav ul {
 }
 
 nav ul li {
-  margin-right: 30px; 
+  margin-right: 30px;
 }
 
 nav ul li:first-child {
@@ -32,15 +32,15 @@ nav ul li:first-child {
 nav ul li a {
   color: white;
   text-decoration: none;
-  padding: 15px 30px; 
-  text-transform: uppercase; 
-  font-weight: bold; 
-  font-size: 18px; 
+  padding: 15px 30px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 nav ul li a:hover {
   text-decoration: underline;
-  color: red; 
+  color: red;
 }
 
 .container {
@@ -55,7 +55,7 @@ nav ul li a:hover {
 form {
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
 
 form div {
@@ -65,32 +65,19 @@ form div {
 form label {
   display: block;
   margin-bottom: 5px;
-  text-transform: uppercase; 
-  font-weight: bold; 
-  font-size: 18px; 
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 form input {
-  width: 100%; 
-  padding: 15px; 
-  font-size: 18px; 
-  text-align: center; 
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  text-align: center;
 }
 
 table {
-  width: 300%; 
-  text-align: center; 
-}
-
-button {
-  padding: 15px 30px; 
-  background-color: #dc3545; 
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 18px; 
-}
-
-button:hover {
-  background-color: #28a745; 
+  width: 300%;
+  text-align: center;
 }

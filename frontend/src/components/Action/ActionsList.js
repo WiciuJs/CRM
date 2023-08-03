@@ -19,7 +19,6 @@ const ActionList = ({ customerId }) => {
       console.error('Error fetching actions:', error.message);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -34,7 +33,7 @@ const ActionList = ({ customerId }) => {
       console.error('Error adding new action:', error.message);
     }
   };
-
+  
   return (
     <div>
       <h2>Dodaj nową akcję</h2>

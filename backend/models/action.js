@@ -8,7 +8,6 @@ exports.getCustomerActions = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 exports.createAction = async (req, res) => {
   const { date, type, description } = req.body;
   const { customerId } = req.params;
@@ -27,3 +26,4 @@ exports.createAction = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
