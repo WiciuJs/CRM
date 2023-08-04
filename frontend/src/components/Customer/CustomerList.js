@@ -17,6 +17,7 @@ const CustomerList = () => {
     nip: '',
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
   useEffect(() => {
     filterCustomers();
   }, [searchTerm]);
@@ -29,6 +30,7 @@ const CustomerList = () => {
     try {
       const response = await axios.get('http://127.0.0.1:5000/api/customers');
       setCustomers(response.data);
+      setFilteredCustomers(response.data);
     } catch (error) {
       console.error('Error fetching customers:', error.message);
     }
@@ -99,7 +101,6 @@ const CustomerList = () => {
       console.error('Error updating customer:', error.message);
     }
   };
-  const [filteredCustomers, setFilteredCustomers] = useState(customers);
 
   return (
     <div className="container">
@@ -114,14 +115,6 @@ const CustomerList = () => {
       </div>
       <ul>
         {filteredCustomers.map((customer) => (
-          <li key={customer._id}>
-            <Link to={`/customer/${customer._id}`}>{customer.name}</Link>
-            <div>{ }</div>
-          </li>
-        ))}
-      </ul>
-      <ul>
-        {customers.map((customer) => (
           <li key={customer._id}>
             <Link to={`/customer/${customer._id}`}>{customer.name}</Link>
             <div>
