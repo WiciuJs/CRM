@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../style/CustomerList.css';
-import '../style/Buttons.css';
 import axios from 'axios';
+
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
@@ -18,23 +17,24 @@ const CustomerList = () => {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
-  useEffect(() => {
-    filterCustomers();
-  }, [searchTerm]);
 
   useEffect(() => {
     fetchCustomers();
   }, []);
 
+  useEffect(() => {
+    filterCustomers();
+  }, [searchTerm, customers]);
+
   const fetchCustomers = async () => {
     try {
       const response = await axios.get('http://127.0.0.1:5000/api/customers');
       setCustomers(response.data);
-      setFilteredCustomers(response.data);
     } catch (error) {
       console.error('Error fetching customers:', error.message);
     }
   };
+
   const filterCustomers = () => {
     const filteredCustomers = customers.filter((customer) =>
       customer.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -74,7 +74,6 @@ const CustomerList = () => {
     setEditedCustomerData({
       ...editedCustomerData,
       [name]: value,
-
     });
   };
 
@@ -89,8 +88,6 @@ const CustomerList = () => {
     });
   };
 
-
-
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -103,88 +100,98 @@ const CustomerList = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Lista klientów</h1>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Wyszukaj klienta..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+    <div className="container mt-4">
+      <div className="row">
+        <div className="col">
+          <h1 className="text-center mb-4">Lista klientów</h1>
+        </div>
       </div>
-      <ul>
+      <div className="row mb-4">
+        <div className="col">
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Wyszukaj klienta..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+      <ul className="list-group">
         {filteredCustomers.map((customer) => (
-          <li key={customer._id}>
+          <li key={customer._id} className="list-group-item d-flex justify-content-between align-items-center">
             <Link to={`/customer/${customer._id}`}>{customer.name}</Link>
             <div>
-              <button className="delete-btn" onClick={() => handleDeleteCustomer(customer._id)}>Usuń</button>
-              {editingCustomer === customer._id ? ( // Jeśli jesteśmy w trybie edycji, wyświetlamy formularz edycji
-                <form onSubmit={handleFormSubmit} id="edit-form" className="edit-form-container">
-                  <div>
+              <button className="btn btn-danger mr-2" onClick={() => handleDeleteCustomer(customer._id)}>Usuń</button>
+              {editingCustomer === customer._id ? (
+                <form onSubmit={handleFormSubmit} className="edit-form-container">
+                  <div className="form-group">
                     <label htmlFor="name">Imię i nazwisko</label>
                     <input
                       type="text"
+                      className="form-control"
                       name="name"
                       value={editedCustomerData.name}
                       onChange={handleInputChange}
                     />
                   </div>
-                  <div>
+                  <div className="form-group">
                     <label htmlFor="street">Ulica</label>
                     <input
                       type="text"
+                      className="form-control"
                       name="street"
                       value={editedCustomerData.address.street}
                       onChange={handleAddressChange}
                     />
                   </div>
-                  <div>
+                  <div className="form-group">
                     <label htmlFor="zipcode">Kod pocztowy</label>
                     <input
                       type="text"
+                      className="form-control"
                       name="zipcode"
                       value={editedCustomerData.address.zipcode}
                       onChange={handleAddressChange}
                     />
                   </div>
-                  <div>
+                  <div className="form-group">
                     <label htmlFor="city">Miasto</label>
                     <input
                       type="text"
+                      className="form-control"
                       name="city"
                       value={editedCustomerData.address.city}
                       onChange={handleAddressChange}
                     />
                   </div>
-                  <div>
+                  <div className="form-group">
                     <label htmlFor="nip">NIP</label>
                     <input
                       type="text"
+                      className="form-control"
                       name="nip"
                       value={editedCustomerData.nip}
                       onChange={handleInputChange}
                     />
                   </div>
                   <div>
-                    <button type="submit" className="edit-btn-green">Zapisz zmiany</button>
-                    <button type="button" onClick={handleCancelEdit} className="edit-btn">Anuluj</button>
+                    <button type="submit" className="btn btn-success mr-2">Zapisz zmiany</button>
+                    <button type="button" onClick={handleCancelEdit} className="btn btn-secondary">Anuluj</button>
                   </div>
                 </form>
               ) : (
-                <button className="edit-btn" onClick={() => handleEditCustomer(customer)}>Modyfikuj</button>
+                <button className="btn btn-primary" onClick={() => handleEditCustomer(customer)}>Modyfikuj</button>
               )}
             </div>
           </li>
         ))}
       </ul>
-      <Link to="/add-customer" className="add-customer-btn">Dodaj klienta</Link>
+      <Link to="/add-customer" className="btn btn-primary mt-4">Dodaj klienta</Link>
     </div>
   );
 };
 
 export default CustomerList;
-
-
-
-

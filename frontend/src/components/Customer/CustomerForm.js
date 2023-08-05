@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-
 const CustomerForm = () => {
   const [name, setName] = useState('');
   const [street, setStreet] = useState('');
@@ -12,8 +11,7 @@ const CustomerForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const customerData =
-     {
+    const customerData = {
       name,
       address: {
         street,
@@ -43,31 +41,31 @@ const CustomerForm = () => {
   };
 
   return (
-    <div>
+    <div className="container mt-4">
       <h1>Dodaj klienta</h1>
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       <form onSubmit={handleSubmit}>
-      <div>
+        <div className="form-group">
           <label>Nazwa:</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+          <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
-        <div>
+        <div className="form-group">
           <label>Ulica:</label>
-          <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} required />
+          <input type="text" className="form-control" value={street} onChange={(e) => setStreet(e.target.value)} required />
         </div>
-        <div>
+        <div className="form-group">
           <label>Kod pocztowy:</label>
-          <input type="text" value={zipcode} onChange={(e) => setZipcode(e.target.value)} required />
+          <input type="text" className="form-control" value={zipcode} onChange={(e) => setZipcode(e.target.value)} required />
         </div>
-        <div>
+        <div className="form-group">
           <label>Miasto:</label>
-          <input type="text" value={city} onChange={(e) => setCity(e.target.value)} required />
+          <input type="text" className="form-control" value={city} onChange={(e) => setCity(e.target.value)} required />
         </div>
-        <div>
+        <div className="form-group">
           <label>NIP:</label>
-          <input type="text" value={nip} onChange={(e) => setNip(e.target.value)} />
+          <input type="text" className="form-control" value={nip} onChange={(e) => setNip(e.target.value)} />
         </div>
-        <button type="submit">Dodaj</button>
+        <button type="submit" className="btn btn-primary">Dodaj</button>
       </form>
     </div>
   );

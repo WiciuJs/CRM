@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CustomerList from './components/Customer/CustomerList';
 import CustomerForm from './components/Customer/CustomerForm';
 import CustomerDetails from './components/Customer/CustomerDetails';
-import './components/style/styles.css';
+import './components/style/App.css';
 
 const App = () => {
   return (
