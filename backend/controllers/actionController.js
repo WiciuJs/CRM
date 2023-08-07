@@ -3,15 +3,12 @@ const Action = require('../models/action');
 exports.getCustomerActions = async (req, res) => {
   try {
     const actions = await Action.find({ customer: req.params.customerId });
-
-    if (actions.length === 0) {
-      return res.status(404).json({ message: 'Brak Akcji dla klienta' });
-    }
-
     res.json(actions);
+    console.log(actions)
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+ 
 };
 exports.createAction = async (req, res) => {
   const { date, type, description } = req.body;

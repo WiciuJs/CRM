@@ -22,7 +22,7 @@ const ActionList = ({ customerId }) => {
 
   const fetchActions = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/api/customers/${customerId}/actions`);
+      const response = await axios.get(`http://127.0.0.1:5000/api/actions/${customerId}`);
       setActions(response.data);
     } catch (error) {
       console.error('Error fetching actions:', error.message);
@@ -51,7 +51,7 @@ const ActionList = ({ customerId }) => {
     try {
       if (isAddingAction) {
         const response = await axios.post(
-          `http://127.0.0.1:5000/api/customers/${customerId}/actions`,
+          `http://127.0.0.1:5000/api/actions/${customerId}`,
           {
             date,
             type,
@@ -61,7 +61,7 @@ const ActionList = ({ customerId }) => {
         console.log('New action added:', response.data);
       } else if (isEditingAction) {
         const response = await axios.put(
-          `http://127.0.0.1:5000/api/customers/${customerId}/actions/${isEditingAction}`,
+          `http://127.0.0.1:5000/api/actions/${isEditingAction}`,
           {
             date,
             type,
@@ -84,7 +84,7 @@ const ActionList = ({ customerId }) => {
 
   const handleDeleteAction = async (actionId) => {
     try {
-      await axios.delete(`http://127.0.0.1:5000/api/customers/${customerId}/actions/${actionId}`);
+      await axios.delete(`http://127.0.0.1:5000/api/actions/${actionId}`);
       console.log('Action deleted successfully');
       fetchActions();
     } catch (error) {
