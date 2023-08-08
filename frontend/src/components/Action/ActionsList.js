@@ -8,7 +8,7 @@ const ActionType = {
   MESSAGE: 'MESSAGE',
 };
 
-const ActionList = ({ customerId }) => {
+const ActionList = ({ customerId, token }) => {
   const [actions, setActions] = useState([]);
   const [date, setDate] = useState('');
   const [type, setType] = useState(ActionType.CALL); 
@@ -18,11 +18,15 @@ const ActionList = ({ customerId }) => {
 
   useEffect(() => {
     fetchActions();
-  }, [customerId]);
+  }, [customerId, token]);
 
   const fetchActions = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/api/actions/${customerId}`);
+      const response = await axios.get(`http://127.0.0.1:5000/api/actions/${customerId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setActions(response.data);
     } catch (error) {
       console.error('Error fetching actions:', error.message);

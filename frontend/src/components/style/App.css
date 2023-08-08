@@ -78,6 +78,14 @@ body {
   }
   
   table {
-    width: 300%;
+    width: 100%;
     text-align: center;
   }
+  
+  .message {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    color: green;
+    text-align: center;
+  }
+  

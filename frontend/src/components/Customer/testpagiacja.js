@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [editedCustomerData, setEditedCustomerData] = useState({
     name: '',
     address: {
@@ -17,10 +18,10 @@ const CustomerList = () => {
     },
     nip: '',
   });
-
+  
   useEffect(() => {
     fetchCustomers();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     filterCustomers();
@@ -28,8 +29,9 @@ const CustomerList = () => {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/api/customers');
-      setCustomers(response.data);
+      const response = await axios.get(`http://127.0.0.1:5000/api/customers/?page=${currentPage}`);
+      setCustomers(response.data.customers || []);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching customers:', error.message);
     }
@@ -119,6 +121,8 @@ const CustomerList = () => {
           </div>
         </div>
       </div>
+
+
       <ul className="list-group">
         {filteredCustomers.map((customer) => (
           <li key={customer._id} className="list-group-item d-flex justify-content-between align-items-center">
@@ -189,6 +193,17 @@ const CustomerList = () => {
           </li>
         ))}
       </ul>
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            className={index + 1 === currentPage ? 'active' : ''}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
       <Link to="/add-customer" className="btn btn-primary mt-4">Dodaj klienta</Link>
     </div>
   );
