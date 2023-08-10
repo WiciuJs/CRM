@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal, Button } from 'react-bootstrap';
 
 
 const CustomerList = () => {
@@ -8,6 +10,8 @@ const CustomerList = () => {
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [customerIdToDelete, setCustomerIdToDelete] = useState(null);
   const [editedCustomerData, setEditedCustomerData] = useState({
     name: '',
     address: {
@@ -17,10 +21,13 @@ const CustomerList = () => {
     },
     nip: '',
   });
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    fetchCustomers();
-  }, []);
+    if (token) {
+      fetchCustomers();
+    }
+  }, [token]);
 
   useEffect(() => {
     filterCustomers();
@@ -42,14 +49,26 @@ const CustomerList = () => {
     setFilteredCustomers(filteredCustomers);
   };
 
-  const handleDeleteCustomer = async (customerId) => {
+  const handleDeleteCustomer = (customerId) => {
+    setCustomerIdToDelete(customerId);
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    setShowConfirmation(false);
     try {
-      await axios.delete(`http://127.0.0.1:5000/api/customers/${customerId}`);
+      await axios.delete(`http://127.0.0.1:5000/api/customers/${customerIdToDelete}`);
       fetchCustomers();
     } catch (error) {
       console.error('Error deleting customer:', error.message);
     }
   };
+
+  const handleCancelDelete = () => {
+    setShowConfirmation(false);
+    setCustomerIdToDelete(null);
+  };
+
 
   const handleEditCustomer = (customer) => {
     setEditingCustomer(customer._id);
@@ -98,7 +117,6 @@ const CustomerList = () => {
       console.error('Error updating customer:', error.message);
     }
   };
-
   return (
     <div className="container mt-4">
       <div className="row">
@@ -189,6 +207,16 @@ const CustomerList = () => {
           </li>
         ))}
       </ul>
+      <Modal show={showConfirmation} onHide={handleCancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Potwierdź usunięcie</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Czy na pewno chcesz usunąć tego użytkownika?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCancelDelete}>Anuluj</Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>Usuń</Button>
+        </Modal.Footer>
+      </Modal>
       <Link to="/add-customer" className="btn btn-primary mt-4">Dodaj klienta</Link>
     </div>
   );

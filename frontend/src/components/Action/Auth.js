@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../style/App.css';
 
 const Auth = ({ onLogin }) => {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
@@ -43,6 +46,7 @@ const Auth = ({ onLogin }) => {
 
         if (response.status === 200) {
           onLogin(response.data.token);
+          navigate('/customer-list');
         } else {
           setMessage('Błąd uwierzytelniania. Sprawdź dane logowania.');
         }

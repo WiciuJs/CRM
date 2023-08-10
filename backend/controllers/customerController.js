@@ -1,4 +1,6 @@
 const Customer = require('../models/customer');
+const express = require('express');
+const router = express.Router();
 
 exports.getAllCustomers = async (req, res) => {
   try {
@@ -8,26 +10,6 @@ exports.getAllCustomers = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-/* exports.getPaginatedCustomers = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const perPage = 10; 
-
-  try {
-    const totalCustomers = await Customer.countDocuments();
-    const totalPages = Math.ceil(totalCustomers / perPage);
-
-    const customers = await Customer.find()
-      .skip((page - 1) * perPage)
-      .limit(perPage);
-
-    res.json({ customers, totalPages });
-  } catch (error) {
-    console.error('Błąd podczas pobierania klientów:', error.message);
-    res.status(500).json({ error: 'Błąd podczas pobierania klientów' });
-  }
-};
- */
 exports.createCustomer = async (req, res) => {
   const { name, address, nip } = req.body;
   const { street, zipcode, city } = address;
